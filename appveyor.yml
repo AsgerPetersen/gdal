@@ -69,7 +69,7 @@ install:
       # Install SWIG and VC for Python2.7 by Choco
       cinst -y --no-progress swig vcpython27
       Import-VisualStudioVars -VisualStudioVersion $env:VS_VER -Architecture $env:ARCHITECTURE
-      exec { pip install numpy }
+      exec { pip install numpy wheel setuptools }
       $env:SDK_ZIP="$env:SDK"+"-dev.zip"
       $env:SDK_URL="http://download.gisinternals.com/sdk/downloads/$env:SDK_ZIP"
       if(-Not (Test-Path -Path downloads)) { mkdir downloads }
@@ -157,6 +157,10 @@ install:
       $env:DISTUTILS_USE_SDK=1
       $env:MSSdk=1
       cd $env:APPVEYOR_BUILD_FOLDER\gdal\swig\python
+      # Build binary dist wheel
+      exec { python setup.py bdist_wheel }
+      # Upload artifact to Appveyor immediately after build
+      exec { ls dist -r | Foreach-Object { appveyor PushArtifact $_.FullName } }
       exec { python setup.py build }
       exec { python setup.py install }
       cd $env:APPVEYOR_BUILD_FOLDER\gdal\swig\csharp
