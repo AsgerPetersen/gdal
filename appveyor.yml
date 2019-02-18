@@ -78,7 +78,7 @@ install:
       cd ..
       mkdir sdk
       cd sdk
-      exec { 7z x ..\downloads\$env:SDK_ZIP }
+      exec { 7z x ..\downloads\$env:SDK_ZIP -aoa}
       $env:SDK_PREFIX="$env:APPVEYOR_BUILD_FOLDER\sdk\$env:SDK"
       $env:SDK_INC="$env:SDK_PREFIX\include"
       $env:SDK_LIB="$env:SDK_PREFIX\lib"
@@ -138,7 +138,7 @@ install:
       $env:VCPKG_PLATFORM="$env:platform"+"-windows"
       exec { vcpkg install sqlite3:$env:VCPKG_PLATFORM }
       appveyor DownloadFile https://sqlite.org/2018/sqlite-tools-win32-x86-3250100.zip
-      exec { 7z x sqlite-tools-win32-x86-3250100.zip }
+      exec { 7z x sqlite-tools-win32-x86-3250100.zip -aoa}
       exec { copy sqlite-tools-win32-x86-3250100/sqlite3.exe $env:APPVEYOR_BUILD_FOLDER }
       $env:PATH="$env:APPVEYOR_BUILD_FOLDER;$env:PATH"
       $env:PROJ_INSTALL_DIR="$env:APPVEYOR_BUILD_FOLDER"+"\install-proj"
